@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const saltRounds = parseInt(process.env.SALT_ROUNDS);
 
-const User = require('../models/user');
+const User = require('../users/model');
 
 const hashPass = async (req, res, next) => {
   try {

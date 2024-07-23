@@ -1,4 +1,4 @@
-const User = require('../models/user');
+const User = require('./model')
 const jwt = require('jsonwebtoken');
 
 const register = async (req, res) => {
@@ -25,7 +25,7 @@ const login = async (req, res) => {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
-    res.status(200).json({ token });
+    res.status(200).json({ user, token });
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
