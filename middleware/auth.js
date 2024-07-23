@@ -1,7 +1,24 @@
 const bcrypt = require('bcrypt');
 const saltRounds = parseInt(process.env.SALT_ROUNDS);
 
-const User = require('../users/model');
+const User = require('../users/model'); 
+
+const verifyToken = (req, res, next) => {
+  // get the token from the header and remove bearer from it
+  const token = req.headers['authorization']?.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ message: 'No token provided' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded.userId;
+    next();
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}
 
 const hashPass = async (req, res, next) => {
   try {
@@ -54,4 +71,5 @@ const comparePass = async (req, res, next) => {
 module.exports = {
   hashPass,
   comparePass,
+  verifyToken
 }

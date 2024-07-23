@@ -37,7 +37,13 @@ const login = async (req, res) => {
   }
 }
 
+const verifyTokenController = (req, res) => {
+  // Getting to this point means the token is valid so just return the user
+  res.status(200).json({ user: req.user });
+}
+
 module.exports = {
   register,
-  login
+  login,
+  verifyTokenController
 };
