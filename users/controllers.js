@@ -16,18 +16,24 @@ const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    // get user with password
+    const user = await User.scope('withPassword').findOne({ email });
+
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(400).json({ message: 'User not found' });
     }
+
+    // Check is password entered matches one in database
     const isMatch = await user.isMatch(password);
+
     if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid email or password' });
+      return res.status(400).json({ message: 'Password is incorrect' });
     }
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
     res.status(200).json({ user, token });
-  } catch (err) {
-    res.status(400).json({ message: err.message });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
 }
 
