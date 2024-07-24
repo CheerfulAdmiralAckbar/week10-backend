@@ -30,7 +30,7 @@ const login = async (req, res) => {
       return res.status(400).json({ message: 'Password is incorrect' });
     }
 
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ userId: user, username: user.username }, process.env.JWT_SECRET);
     res.status(200).json({ user, token });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -39,7 +39,7 @@ const login = async (req, res) => {
 
 const verifyTokenController = (req, res) => {
   // Getting to this point means the token is valid so just return the user
-  res.status(200).json({ user: req.user });
+  res.status(200).json({ user: req.user.id });
 }
 
 module.exports = {

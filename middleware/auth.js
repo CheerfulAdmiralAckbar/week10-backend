@@ -1,11 +1,13 @@
 const bcrypt = require('bcrypt');
 const saltRounds = parseInt(process.env.SALT_ROUNDS);
+const jwt = require('jsonwebtoken');
 
 const User = require('../users/model'); 
 
 const verifyToken = (req, res, next) => {
   // get the token from the header and remove bearer from it
-  const token = req.headers['authorization']?.split(' ')[1];
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
     return res.status(401).json({ message: 'No token provided' });
@@ -14,9 +16,10 @@ const verifyToken = (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded.userId;
+    console.log("verified token");
     next();
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return res.status(403).json({ message: 'Invalid token' });
   }
 }
 
