@@ -3,8 +3,10 @@ const express = require('express');
 const cors = require('cors');
 
 const userRouter = require('./users/routes');
+const favouriteRouter = require('./favourites/routes');
 
 const User = require('./users/model');
+const Favourite = require('./favourites/model');
 
 const port = process.env.PORT || 5001;
 
@@ -14,11 +16,16 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/users', userRouter);
+app.use('/favourites', favouriteRouter);
 
 
 const syncTables = () => {
-  // Sync Models
-  User.sync({ alter: true })
+  // Associations
+  User.hasMany(Favourite);
+  FavouriteImage.belongsTo(User);
+
+  User.sync({ alter: true });
+  FavoriteImage.sync({ alter: true });
 }
 
 app.listen(port, () => {
