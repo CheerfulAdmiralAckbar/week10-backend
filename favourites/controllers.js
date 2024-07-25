@@ -1,14 +1,16 @@
-const { Favourite } = require('./model');
+const Favourite = require('./model');
+console.log('Favourite model:', Favourite);
 
 const addFavourite = async (req, res) => {
+  console.log('Request body:', req.body);
   try {
-    const { userId, unsplashId, thumbnailUrl, authorName } = req.body;
+    const { userId, imageId, thumbnailUrl, authorName } = req.body;
 
     const newFavourite = await Favourite.create({
-      userId,
-      unsplashId,
-      thumbnailUrl,
-      authorName
+      userId: userId,
+      unsplashId: imageId,
+      thumbnailUrl: thumbnailUrl,
+      authorName: authorName
     });
 
     res.status(201).json({ message: 'Image favorited successfully', favourite: newFavourite });

@@ -1,17 +1,18 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db/connection');
+const User = require('../users/model');
 
-const Favourite = sequelize.define('Favourite', {
+const Favourite = sequelize.define('favourite', {
   id: {
     type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
+    autoIncrement: true,
+    primaryKey: true
   },
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'Users',
+      model: User,
       key: 'id'
     }
   },
@@ -24,9 +25,14 @@ const Favourite = sequelize.define('Favourite', {
     allowNull: false
   },
   authorName: {
-    type: DataTypes.STRING,
-    allowNull: true
+    type: DataTypes.STRING
   }
+}, {
+  tableName: 'favourites',
+  modelName: 'favourite'
 });
+
+// Define the association
+Favourite.belongsTo(User, { foreignKey: 'userId' });
 
 module.exports = Favourite;

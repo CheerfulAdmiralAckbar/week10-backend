@@ -5,9 +5,11 @@ const jwt = require('jsonwebtoken');
 const User = require('../users/model'); 
 
 const verifyToken = (req, res, next) => {
-  console.log('Headers:', req.headers);
   const authHeader = req.headers['authorization'];
-  console.log('Auth header:', authHeader);
+
+  console.log('All headers:', JSON.stringify(req.headers, null, 2));
+  console.log('Authorization header:', req.headers['authorization']);
+  console.log('authorization header:', req.headers['authorization']);
 
   const token = authHeader && authHeader.split(' ')[1];
 
