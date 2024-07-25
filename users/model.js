@@ -27,7 +27,10 @@ const User = sequelize.define('user', {
     withPassword: {
       attributes: { }
     }
-  }
+  },
+  // Fix for SQL error with table name
+  tableName: 'users',
+  modelName: 'user',
 });
 
 
