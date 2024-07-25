@@ -20,4 +20,18 @@ const addFavourite = async (req, res) => {
   }
 };
 
-module.exports = { addFavourite };
+const getFavourites = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const favourites = await Favourite.findAll({
+      where: { userId: userId }, 
+      order: [['createdAt', 'DESC']],
+    });
+    res.status(200).json({ message: 'Favourites retrieved successfully', favourites });
+  } catch (error) {
+    console.error('Error retrieving favourites:', error);
+    res.status(500).json({ message: 'Error retrieving favourites', error: error.message });
+  }
+};
+
+module.exports = { addFavourite, getFavourites };
