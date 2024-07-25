@@ -1,4 +1,4 @@
-const { Favourite } = require('../models');
+const { Favourite } = require('./model');
 
 const addFavourite = async (req, res) => {
   try {

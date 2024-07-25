@@ -19,13 +19,14 @@ app.use('/users', userRouter);
 app.use('/favourites', favouriteRouter);
 
 
-const syncTables = () => {
-  // Associations
-  User.hasMany(Favourite);
-  FavouriteImage.belongsTo(User);
+const syncTables = async () => {
+  // Users will have many favourites and favourites will belong to a user
+  User.hasMany(Favourite, { foreignKey: 'userId' });
+  Favourite.belongsTo(User, { foreignKey: 'userId' });
 
-  User.sync({ alter: true });
-  FavoriteImage.sync({ alter: true });
+  // Sync tables
+  await User.sync({ alter: true });
+  await Favourite.sync({ alter: true });
 }
 
 app.listen(port, () => {
